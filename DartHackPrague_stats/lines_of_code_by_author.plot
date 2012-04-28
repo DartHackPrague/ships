@@ -11,4 +11,4 @@ set grid y
 set ylabel "Lines"
 set xtics rotate
 set bmargin 6
-plot 'lines_of_code_by_author.dat' using 1:2 title "Tomas Jukin" w lines, 'lines_of_code_by_author.dat' using 1:3 title "Tomáš Jukin" w lines
+plot 'lines_of_code_by_author.dat' using 1:2 title "Tomas Jukin" w lines, 'lines_of_code_by_author.dat' using 1:3 title "Eugen Krizo" w lines, 'lines_of_code_by_author.dat' using 1:4 title "Tomáš Jukin" w lines
