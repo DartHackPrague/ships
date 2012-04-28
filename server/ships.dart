@@ -19,18 +19,23 @@ void requestReceivedHandler(HttpRequest request, HttpResponse response) {
     print("Request: ${request.method} ${request.uri}");
   }
 
-  String htmlResponse = createJSONResponse();
+  var data = request.queryParameters["data"];
+  
+  print("data:" + data);
+  data = JSON.parse(data);
+  
+  String htmlResponse = createJSONResponse(data);
   
   response.headers.set(HttpHeaders.CONTENT_TYPE, "text/html; charset=UTF-8");
   response.outputStream.writeString(htmlResponse);
   response.outputStream.close();
 }
 
-String createJSONResponse() {
+String createJSONResponse(data) {
   var arr = [1, 3, 4, 5, 7];
   arr.add(9);
   
-  var ret = JSON.stringify({"foo": arr});
+  var ret = JSON.stringify({"foo": arr, "submitedData": data});
   
   ret = "callbackForJsonpApi(" + ret + ");";
       
