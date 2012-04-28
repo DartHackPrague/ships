@@ -8,7 +8,7 @@ class ShipsClient {
   }
 
   void run() {
-    write("Battleships game");
+    write("Ship Battle Game");
     
     // listen for the postMessage from the main page
     window.on.message.add(dataReceived);
