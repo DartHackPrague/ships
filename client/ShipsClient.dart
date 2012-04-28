@@ -16,6 +16,21 @@ class ShipsClient {
 
     request("pal", [2, 2]);
     
+    // create playboard
+    TableElement table = document.query('#sea');
+    for  (var i = 0; i < 10; i++) {
+      TableRowElement row = table.insertRow(0);
+      
+      for (var j = 0; j < 10; j++) {
+        TableCellElement cell = row.insertCell(0);
+        
+        cell.text = "";
+        cell.bgColor = "lightgray";
+        cell.height = "15";
+        cell.width = "15";
+      }
+    }
+    
     //sendRequest("http://localhost:8090/entry", {"baf" : 15},
     //            (Map response) => uiProcessResponse(response),
     //            () => uiProcessResponse({"sprava":"nefunguje siet"}));
