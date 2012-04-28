@@ -31,6 +31,8 @@ String createJSONResponse() {
   arr.add(9);
   
   var ret = JSON.stringify({"foo": arr});
+  
+  ret = "callbackForJsonpApi(" + ret + ");";
       
   return ret;
 }

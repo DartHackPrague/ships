@@ -10,9 +10,21 @@ class ShipsClient {
   void run() {
     write("Battleships game");
     
-    sendRequest("http://localhost:8090/entry", {"baf" : 15},
-                (Map response) => uiProcessResponse(response),
-                () => uiProcessResponse({"sprava":"nefunguje siet"}));
+    // listen for the postMessage from the main page
+    window.on.message.add(dataReceived);
+
+    Element script = new Element.tag("script");
+    script.src = "http://localhost:8090/entry?callback=callbackForJsonpApi";
+    document.body.elements.add(script);
+
+    
+    //sendRequest("http://localhost:8090/entry", {"baf" : 15},
+    //            (Map response) => uiProcessResponse(response),
+    //            () => uiProcessResponse({"sprava":"nefunguje siet"}));
+  }
+
+  dataReceived(MessageEvent e) {
+    write(e.data);
   }
 
   void write(String message) {

@@ -3,6 +3,11 @@
 <html>
   <head>
     <title>HelloWorld</title>
+    <script type="text/javascript">
+		function callbackForJsonpApi(s) {
+			window.postMessage(JSON.stringify(s), '*');
+		}
+	</script>
   </head>
   <body>
     <h1>HelloWorld</h1>
