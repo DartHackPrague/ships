@@ -32,10 +32,15 @@ void requestReceivedHandler(HttpRequest request, HttpResponse response) {
 }
 
 String createJSONResponse(data) {
-  var arr = [1, 3, 4, 5, 7];
-  arr.add(9);
+  //var arr = [1, 3, 4, 5, 7];
+  //arr.add(9);
+  var i = data["i"];
+  var j = data["j"];
   
-  var ret = JSON.stringify({"foo": arr, "submitedData": data});
+  // stub hit / miss reporting
+  data["hit"] = (0 == (i % 3));
+  
+  var ret = JSON.stringify({"shot": data});
   
   ret = "callbackForJsonpApi(" + ret + ");";
       
