@@ -14,7 +14,7 @@ class ShipsClient {
     window.on.message.add(dataReceived);
 
 
-    request("pal", [2, 2]);
+    //request("pal", [2, 2]);
     
     // create playboard
     TableElement table = document.query('#sea');
@@ -28,6 +28,11 @@ class ShipsClient {
         cell.bgColor = "lightgray";
         cell.height = "15";
         cell.width = "15";
+        cell.id = "sea-" + i + "-" + j;
+        
+        cell.on.click.add((MouseEvent e) {
+          request("pal", {"i":i, "j":j});
+        });
       }
     }
     
@@ -38,6 +43,16 @@ class ShipsClient {
 
   dataReceived(MessageEvent e) {
     write(e.data);
+    
+    var data = JSON.parse(e.data);
+    String id = "#sea-" + data["shot"]["i"] + "-" + data["shot"]["j"];
+    TableCellElement cell = document.query(id);
+    
+    if (data["shot"]["hit"]) {
+      cell.bgColor = "red";
+    } else {
+      cell.bgColor = "darkgray";
+    }
   }
 
   /**
