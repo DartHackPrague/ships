@@ -15,9 +15,20 @@ class ShipsClient {
 
 
     //request("pal", [2, 2]);
+    createPlayground("player-sea", "placeShip", "alfa");
+    createPlayground("oponent-sea", "fire", "beta");
     
-    // create playboard
-    TableElement table = document.query('#sea');
+    //sendRequest("http://localhost:8090/entry", {"baf" : 15},
+    //            (Map response) => uiProcessResponse(response),
+    //            () => uiProcessResponse({"sprava":"nefunguje siet"}));
+  }
+
+  // create playboard in
+  // table with specified id
+  // on click send the operation 
+  // and idntify/authorize with token
+  createPlayground(String tableId, String operationName, String token) {
+    TableElement table = document.query('#' + tableId);
     for  (var i = 0; i < 10; i++) {
       TableRowElement row = table.insertRow(0);
       
@@ -28,24 +39,20 @@ class ShipsClient {
         cell.bgColor = "lightgray";
         cell.height = "15";
         cell.width = "15";
-        cell.id = "sea-" + i + "-" + j;
+        cell.id = tableId + "-" + i + "-" + j;
         
         cell.on.click.add((MouseEvent e) {
-          request("pal", {"i":i, "j":j});
+          request(operationName, {"i":i, "j":j});
         });
       }
     }
-    
-    //sendRequest("http://localhost:8090/entry", {"baf" : 15},
-    //            (Map response) => uiProcessResponse(response),
-    //            () => uiProcessResponse({"sprava":"nefunguje siet"}));
   }
-
+  
   dataReceived(MessageEvent e) {
     write(e.data);
     
     var data = JSON.parse(e.data);
-    String id = "#sea-" + data["shot"]["i"] + "-" + data["shot"]["j"];
+    String id = "#oponent-sea-" + data["shot"]["i"] + "-" + data["shot"]["j"];
     TableCellElement cell = document.query(id);
     
     if (data["shot"]["hit"]) {

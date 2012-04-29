@@ -12,7 +12,18 @@
   <body>
     <h1>Ship Battle</h1>
     <h2 id="status">dart is not running</h2>
-    <table id="sea"></table>
+    <table>
+    	<tr>
+    		<th id="oponent-label">Oponent</th>
+    		<th>&nbsp;</th>
+    		<th id="player-label">Player</th>
+    	</tr>
+	    <tr>
+		    <td><table id="oponent-sea"></table></td>
+		    <td>&nbsp;</td>
+		    <td><table id="player-sea"></table></td>
+	    </tr>
+    </table>
     <script type="application/dart" src="ShipsClient.dart"></script>
     <script src="http://dart.googlecode.com/svn/branches/bleeding_edge/dart/client/dart.js"></script>
   </body>
