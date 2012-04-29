@@ -2,6 +2,7 @@
 //#import('dart:io');
 #import('dart:json');
 
+
 class ShipsClient {
 
   ShipsClient() {
@@ -16,7 +17,11 @@ class ShipsClient {
     document.query("#player-label").on.click.add((MouseEvent e) {
       request("findShotsOnPlayer", {});
     });
-
+    
+    //new Timer.repeating(1000, (Timer timer) {
+    //  request("findShotsOnPlayer", {});
+    //});
+    
     //request("pal", [2, 2]);
     createPlayground("player-sea", "placeShip", "alfa");
     createPlayground("oponent-sea", "shoot", "beta");
@@ -52,7 +57,7 @@ class ShipsClient {
   }
   
   dataReceived(MessageEvent e) {
-    write(e.data);
+    print(e.data);
     
     var data = JSON.parse(e.data);
     
