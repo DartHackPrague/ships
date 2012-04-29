@@ -43,15 +43,15 @@ void main() {
 
 String shoot(String operation, data, games) {
   
-  // encode coordinates to representation used by our data structure
-  var coordinates = "" + data["i"] + "," + data["j"];
-  
   // lookup game according to publicId
   var game = games[0]; // TODO
  
   
   if ("shoot" == operation)
   { // execute shooting
+    
+    // encode coordinates to representation used by our data structure
+    var coordinates = data["coordinates"];
     
     // get list of ships
     List ships = game["ships"]; 
@@ -67,6 +67,10 @@ String shoot(String operation, data, games) {
   }
   else if ("placeShip" == operation)
   { // place ship to board
+
+    // encode coordinates to representation used by our data structure
+    var coordinates = data["coordinates"];
+    
     game["ships"].add(coordinates);
     data["sea"] = "player";
   }
@@ -77,12 +81,8 @@ String shoot(String operation, data, games) {
     List reportedShots = [];
      
     for (String shot in shots) {
-      var i = shot.split(",")[0];
-      var j = shot.split(",")[1];
-      
       var reportedShot = {};
-      reportedShot["i"] = i;
-      reportedShot["j"] = j;
+      reportedShot["coordinates"] = shot;
       reportedShot["operation"] = "shoot";
       reportedShot["sea"] = "player";
       reportedShot["hit"] = ships.indexOf(shot) >= 0;

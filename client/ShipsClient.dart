@@ -34,7 +34,7 @@ class ShipsClient {
   // create playboard in
   // table with specified id
   // on click send the operation 
-  // and idntify/authorize with token
+  // and identify/authorize with token
   createPlayground(String tableId, String operationName, String token) {
     TableElement table = document.query('#' + tableId);
     for  (var i = 0; i < 10; i++) {
@@ -42,15 +42,16 @@ class ShipsClient {
       
       for (var j = 0; j < 10; j++) {
         TableCellElement cell = row.insertCell(0);
+        String coordinates = "" + i + "-" + j;
         
         cell.text = "";
         cell.bgColor = "lightgray";
         cell.height = "15";
         cell.width = "15";
-        cell.id = tableId + "-" + i + "-" + j;
+        cell.id = tableId + "-" + coordinates;
         
         cell.on.click.add((MouseEvent e) {
-          request(operationName, {"i":i, "j":j});
+          request(operationName, {"coordinates": coordinates});
         });
       }
     }
@@ -63,7 +64,7 @@ class ShipsClient {
     
     if (data is List) {
       for (Map shot in data) {
-        String id = "#" + shot["sea"] + "-sea-" + shot["i"] + "-" + shot["j"];
+        String id = "#" + shot["sea"] + "-sea-" + shot["coordinates"];
         TableCellElement cell = document.query(id);
         if (shot["hit"]) {
           cell.bgColor = "red";
@@ -73,7 +74,7 @@ class ShipsClient {
       }
     }
     else if ("shoot" == data["operation"]) {
-      String id = "#" + data["sea"] + "-sea-" + data["i"] + "-" + data["j"];
+      String id = "#" + data["sea"] + "-sea-" + data["coordinates"];
       TableCellElement cell = document.query(id);
       if (data["hit"]) {
         cell.bgColor = "red";
@@ -82,7 +83,7 @@ class ShipsClient {
       }
     }
     else if ("placeShip" == data["operation"]) {
-      String id = "#" + data["sea"] + "-sea-" + data["i"] + "-" + data["j"];
+      String id = "#" + data["sea"] + "-sea-" + data["coordinates"];
       TableCellElement cell = document.query(id);
       cell.bgColor = "blue";
     }
