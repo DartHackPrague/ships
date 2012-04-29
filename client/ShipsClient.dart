@@ -4,27 +4,46 @@
 
 
 class ShipsClient {
+  var _gameState; 
 
+  // state should be: placeShips | shoot
+  void setGameState(String gameState) {
+    _gameState = gameState;
+    
+    // make border around the table according to state
+    TableElement playerTable = document.query("#player-sea");
+    TableElement oponentTable = document.query("#oponent-sea");
+    if ("placeShips" == gameState) {
+      playerTable.style.setProperty("border", "10px solid pink");
+      oponentTable.style.setProperty("border", "");
+    }
+    else if ("shoot" == gameState) {
+      playerTable.style.setProperty("border", "");
+      oponentTable.style.setProperty("border", "10px solid pink");
+    }
+  }
+  
   ShipsClient() {
   }
 
   void run() {
     write("Ship Battle Game");
+    setGameState("placeShips");
     
     // listen for the postMessage from the main page
     window.on.message.add(dataReceived);
 
-    document.query("#player-label").on.click.add((MouseEvent e) {
-      request("findShotsOnPlayer", {});
-    });
+    //document.query("#player-label").on.click.add((MouseEvent e) {
+    //  request("findShotsOnPlayer", {});
+    //});
     
     //new Timer.repeating(1000, (Timer timer) {
     //  request("findShotsOnPlayer", {});
     //});
     
     //request("pal", [2, 2]);
-    createPlayground("player-sea", "placeShip", "alfa");
-    createPlayground("oponent-sea", "shoot", "beta");
+    createPlayground("player-sea", "placeShip", "placeShips");
+    createPlayground("oponent-sea", "shoot", "shoot");
     
     //sendRequest("http://localhost:8090/entry", {"baf" : 15},
     //            (Map response) => uiProcessResponse(response),
@@ -34,8 +53,8 @@ class ShipsClient {
   // create playboard in
   // table with specified id
   // on click send the operation 
-  // and identify/authorize with token
-  createPlayground(String tableId, String operationName, String token) {
+  // and be active in specified state
+  createPlayground(String tableId, String operationName, String state) {
     TableElement table = document.query('#' + tableId);
     for  (var i = 0; i < 10; i++) {
       TableRowElement row = table.insertRow(0);
@@ -51,7 +70,9 @@ class ShipsClient {
         cell.id = tableId + "-" + coordinates;
         
         cell.on.click.add((MouseEvent e) {
-          request(operationName, {"coordinates": coordinates});
+          if (state == _gameState) {
+            request(operationName, {"coordinates": coordinates});
+          }
         });
       }
     }
