@@ -52,10 +52,10 @@ class ShipsClient {
     write(e.data);
     
     var data = JSON.parse(e.data);
-    String id = "#oponent-sea-" + data["shot"]["i"] + "-" + data["shot"]["j"];
+    String id = "#" + data["sea"] + "-sea-" + data["i"] + "-" + data["j"];
     TableCellElement cell = document.query(id);
     
-    if (data["shot"]["hit"]) {
+    if (data["hit"]) {
       cell.bgColor = "red";
     } else {
       cell.bgColor = "darkgray";
@@ -63,13 +63,14 @@ class ShipsClient {
   }
 
   /**
-   * deliver json to method on server
+   * deliver json to server, submit operation and data
    */
-  request(method, data) {
+  request(operation, data) {
     Element script = new Element.tag("script");
     
-    script.src = "http://localhost:8090/" + method
-        + "?data=" + JSON.stringify(data)
+    script.src = "http://localhost:8090/ships"
+        + "?operation=" + operation
+        + "&data=" + JSON.stringify(data)
         + "&callback=callbackForJsonpApi";
     document.body.elements.add(script);
   }

@@ -22,11 +22,13 @@ void main() {
         }
     
         var data = request.queryParameters["data"];
+        String operation = request.queryParameters["operation"];
         
+        print("operation:" + operation);
         print("data:" + data);
         data = JSON.parse(data);
         
-        String htmlResponse = shoot(data, games);
+        String htmlResponse = shoot(operation, data, games);
         
         response.headers.set(HttpHeaders.CONTENT_TYPE, "text/html; charset=UTF-8");
         response.outputStream.writeString(htmlResponse);
@@ -39,7 +41,7 @@ void main() {
   print("Serving the current time on http://${HOST}:${PORT}."); 
 }
 
-String shoot(data, games) {
+String shoot(operation, data, games) {
   
   // encode coordinates to representation used by our data structure
   var shot = "" + data["i"] + "," + data["j"];
@@ -55,8 +57,10 @@ String shoot(data, games) {
   
   // determine if the ship was hit
   data["hit"] = ships.indexOf(shot) >= 0;
+  data["sea"] = "oponent";
+  data["operation"] = operation;
   
-  var ret = JSON.stringify({"shot": data});
+  var ret = JSON.stringify(data);
   
   ret = "callbackForJsonpApi(" + ret + ");";
       
