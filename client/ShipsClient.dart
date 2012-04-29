@@ -62,30 +62,26 @@ class ShipsClient {
     
     var data = JSON.parse(e.data);
     
-    if (data is List) {
-      for (Map shot in data) {
-        String id = "#" + shot["sea"] + "-sea-" + shot["coordinates"];
+    if (data is Map) {
+      data = [data];
+    }
+    
+    for (Map msg in data) {
+      if ("shoot" == msg["operation"]) {
+        String id = "#" + msg["sea"] + "-sea-" + msg["coordinates"];
         TableCellElement cell = document.query(id);
-        if (shot["hit"]) {
+        
+        if (msg["hit"]) {
           cell.bgColor = "red";
         } else {
           cell.bgColor = "darkgray";
         }
       }
-    }
-    else if ("shoot" == data["operation"]) {
-      String id = "#" + data["sea"] + "-sea-" + data["coordinates"];
-      TableCellElement cell = document.query(id);
-      if (data["hit"]) {
-        cell.bgColor = "red";
-      } else {
-        cell.bgColor = "darkgray";
+      else if ("placeShip" == msg["operation"]) {
+        String id = "#" + msg["sea"] + "-sea-" + msg["coordinates"];
+        TableCellElement cell = document.query(id);
+        cell.bgColor = "blue";
       }
-    }
-    else if ("placeShip" == data["operation"]) {
-      String id = "#" + data["sea"] + "-sea-" + data["coordinates"];
-      TableCellElement cell = document.query(id);
-      cell.bgColor = "blue";
     }
   }
 
