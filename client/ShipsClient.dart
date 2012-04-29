@@ -13,6 +13,9 @@ class ShipsClient {
     // listen for the postMessage from the main page
     window.on.message.add(dataReceived);
 
+    document.query("#player-label").on.click.add((MouseEvent e) {
+      request("findShotsOnPlayer", {});
+    });
 
     //request("pal", [2, 2]);
     createPlayground("player-sea", "placeShip", "alfa");
@@ -52,16 +55,30 @@ class ShipsClient {
     write(e.data);
     
     var data = JSON.parse(e.data);
-    String id = "#" + data["sea"] + "-sea-" + data["i"] + "-" + data["j"];
-    TableCellElement cell = document.query(id);
     
-    if ("shoot" == data["operation"]) {
+    if (data is List) {
+      for (Map shot in data) {
+        String id = "#" + shot["sea"] + "-sea-" + shot["i"] + "-" + shot["j"];
+        TableCellElement cell = document.query(id);
+        if (shot["hit"]) {
+          cell.bgColor = "red";
+        } else {
+          cell.bgColor = "darkgray";
+        }
+      }
+    }
+    else if ("shoot" == data["operation"]) {
+      String id = "#" + data["sea"] + "-sea-" + data["i"] + "-" + data["j"];
+      TableCellElement cell = document.query(id);
       if (data["hit"]) {
         cell.bgColor = "red";
       } else {
         cell.bgColor = "darkgray";
       }
-    } else if ("placeShip" == data["operation"]) {
+    }
+    else if ("placeShip" == data["operation"]) {
+      String id = "#" + data["sea"] + "-sea-" + data["i"] + "-" + data["j"];
+      TableCellElement cell = document.query(id);
       cell.bgColor = "blue";
     }
   }

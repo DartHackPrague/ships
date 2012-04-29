@@ -56,8 +56,10 @@ String shoot(String operation, data, games) {
     // get list of ships
     List ships = game["ships"]; 
     //print(ships);
-    
-    // record shot // TODO
+    print(game);
+        
+    // record shot
+    game["shots"].add(coordinates);
     
     // determine if the ship was hit
     data["hit"] = ships.indexOf(coordinates) >= 0;
@@ -68,12 +70,37 @@ String shoot(String operation, data, games) {
     game["ships"].add(coordinates);
     data["sea"] = "player";
   }
+  else if ("findShotsOnPlayer" == operation)
+  { // find shots fired on player, with coordinates and hit/miss result
+    List ships = game["ships"];
+    List shots = game["shots"];
+    List reportedShots = [];
+     
+    for (String shot in shots) {
+      var i = shot.split(",")[0];
+      var j = shot.split(",")[1];
+      
+      var reportedShot = {};
+      reportedShot["i"] = i;
+      reportedShot["j"] = j;
+      reportedShot["operation"] = "shoot";
+      reportedShot["sea"] = "player";
+      reportedShot["hit"] = ships.indexOf(shot) >= 0;
+      
+      reportedShots.add(reportedShot);
+    }
+    var ret = JSON.stringify(reportedShots);
+    ret = "callbackForJsonpApi(" + ret + ");";
+    return ret;
+  }
   
   // create response
   data["operation"] = operation;
   var ret = JSON.stringify(data);
   ret = "callbackForJsonpApi(" + ret + ");";
       
+  print("returning JSON: " + ret);
+  
   return ret;
 }
 
