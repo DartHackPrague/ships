@@ -26,7 +26,7 @@ void main() {
         print("data:" + data);
         data = JSON.parse(data);
         
-        String htmlResponse = createJSONResponse(data, games);
+        String htmlResponse = shoot(data, games);
         
         response.headers.set(HttpHeaders.CONTENT_TYPE, "text/html; charset=UTF-8");
         response.outputStream.writeString(htmlResponse);
@@ -39,16 +39,21 @@ void main() {
   print("Serving the current time on http://${HOST}:${PORT}."); 
 }
 
-String createJSONResponse(data, games) {
-  //var arr = [1, 3, 4, 5, 7];
-  //arr.add(9);
-  var i = data["i"];
-  var j = data["j"];
+String shoot(data, games) {
+  
+  // encode coordinates to representation used by our data structure
+  var shot = "" + data["i"] + "," + data["j"];
+  
+  // lookup game according to publicId
+  var game = games[0]; // TODO
+  
+  // get list of ships
+  List ships = game["ships"]; 
+  //print(ships);
+  
+  // record shot // TODO
   
   // determine if the ship was hit
-  var shot = "" + i + "," + j;
-  List ships = games[0]["ships"];
-  //print(ships);
   data["hit"] = ships.indexOf(shot) >= 0;
   
   var ret = JSON.stringify({"shot": data});
