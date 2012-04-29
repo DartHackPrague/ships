@@ -88,6 +88,10 @@ class ShipsClient {
     }
     
     for (Map msg in data) {
+      if (msg.containsKey("state")) {
+        setGameState(msg["state"]);
+      }
+      
       if ("shoot" == msg["operation"]) {
         String id = "#" + msg["sea"] + "-sea-" + msg["coordinates"];
         TableCellElement cell = document.query(id);

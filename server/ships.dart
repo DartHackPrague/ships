@@ -3,6 +3,7 @@
 
 final HOST = "127.0.0.1";
 final PORT = 8090;
+final SHIP_COUNT = 3;
 
 void main() {
   HttpServer server = new HttpServer();
@@ -10,7 +11,7 @@ void main() {
                  {
                    "secretId" : "alfa",
                    "publicId" : "beta",
-                   "ships" : ["1,0", "1,1", "1,2", "2,1"],
+                   "ships" : [],
                    "shots" : []
                  }
                ];
@@ -45,40 +46,60 @@ String shoot(String operation, data, games) {
   
   // lookup game according to publicId
   var game = games[0]; // TODO
- 
+  List ret = []; 
   
   if ("shoot" == operation)
   { // execute shooting
-    
-    // encode coordinates to representation used by our data structure
+ 
     var coordinates = data["coordinates"];
     
     // get list of ships
     List ships = game["ships"]; 
     //print(ships);
     print(game);
-        
+    
     // record shot
     game["shots"].add(coordinates);
     
     // determine if the ship was hit
     data["hit"] = ships.indexOf(coordinates) >= 0;
     data["sea"] = "oponent";
+    data["operation"] = operation;
+    
+    ret.add(data);
   }
   else if ("placeShip" == operation)
   { // place ship to board
 
-    // encode coordinates to representation used by our data structure
     var coordinates = data["coordinates"];
+
+    if (game["ships"].length >= SHIP_COUNT) {
+      print("too many ships: " + game["ships"]);
+      return "";  // ensure not too many ships are on the map
+    }
+    else if (game["ships"].indexOf(coordinates) >= 0) {
+      print("duplicit ship: " + game["ships"] + " - " + coordinates);
+      return "";  // avoid duplicity in ships placement
+    }
     
     game["ships"].add(coordinates);
+
     data["sea"] = "player";
+    data["operation"] = operation;
+    
+    ret.add(data);
+    
+    // change state if enough ships was placed on board
+    if (game["ships"].length == SHIP_COUNT) {
+      ret.add({
+        "state" : "shoot"
+      });
+    }
   }
   else if ("findShotsOnPlayer" == operation)
   { // find shots fired on player, with coordinates and hit/miss result
     List ships = game["ships"];
     List shots = game["shots"];
-    List reportedShots = [];
      
     for (String shot in shots) {
       var reportedShot = {};
@@ -87,16 +108,12 @@ String shoot(String operation, data, games) {
       reportedShot["sea"] = "player";
       reportedShot["hit"] = ships.indexOf(shot) >= 0;
       
-      reportedShots.add(reportedShot);
+      ret.add(reportedShot);
     }
-    var ret = JSON.stringify(reportedShots);
-    ret = "callbackForJsonpApi(" + ret + ");";
-    return ret;
   }
   
   // create response
-  data["operation"] = operation;
-  var ret = JSON.stringify(data);
+  ret = JSON.stringify(ret);
   ret = "callbackForJsonpApi(" + ret + ");";
       
   print("returning JSON: " + ret);
