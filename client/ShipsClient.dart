@@ -16,7 +16,7 @@ class ShipsClient {
 
     //request("pal", [2, 2]);
     createPlayground("player-sea", "placeShip", "alfa");
-    createPlayground("oponent-sea", "fire", "beta");
+    createPlayground("oponent-sea", "shoot", "beta");
     
     //sendRequest("http://localhost:8090/entry", {"baf" : 15},
     //            (Map response) => uiProcessResponse(response),
@@ -55,10 +55,14 @@ class ShipsClient {
     String id = "#" + data["sea"] + "-sea-" + data["i"] + "-" + data["j"];
     TableCellElement cell = document.query(id);
     
-    if (data["hit"]) {
-      cell.bgColor = "red";
-    } else {
-      cell.bgColor = "darkgray";
+    if ("shoot" == data["operation"]) {
+      if (data["hit"]) {
+        cell.bgColor = "red";
+      } else {
+        cell.bgColor = "darkgray";
+      }
+    } else if ("placeShip" == data["operation"]) {
+      cell.bgColor = "blue";
     }
   }
 

@@ -41,27 +41,37 @@ void main() {
   print("Serving the current time on http://${HOST}:${PORT}."); 
 }
 
-String shoot(operation, data, games) {
+String shoot(String operation, data, games) {
   
   // encode coordinates to representation used by our data structure
-  var shot = "" + data["i"] + "," + data["j"];
+  var coordinates = "" + data["i"] + "," + data["j"];
   
   // lookup game according to publicId
   var game = games[0]; // TODO
+ 
   
-  // get list of ships
-  List ships = game["ships"]; 
-  //print(ships);
+  if ("shoot" == operation)
+  { // execute shooting
+    
+    // get list of ships
+    List ships = game["ships"]; 
+    //print(ships);
+    
+    // record shot // TODO
+    
+    // determine if the ship was hit
+    data["hit"] = ships.indexOf(coordinates) >= 0;
+    data["sea"] = "oponent";
+  }
+  else if ("placeShip" == operation)
+  { // place ship to board
+    game["ships"].add(coordinates);
+    data["sea"] = "player";
+  }
   
-  // record shot // TODO
-  
-  // determine if the ship was hit
-  data["hit"] = ships.indexOf(shot) >= 0;
-  data["sea"] = "oponent";
+  // create response
   data["operation"] = operation;
-  
   var ret = JSON.stringify(data);
-  
   ret = "callbackForJsonpApi(" + ret + ");";
       
   return ret;
