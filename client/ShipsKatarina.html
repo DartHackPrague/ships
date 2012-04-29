@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>Ship Battle</title>
+    <script type="text/javascript">
+		function callbackForJsonpApi(s) {
+			window.postMessage(JSON.stringify(s), '*');
+		}
+	</script>
+  </head>
+  <body>
+    <h1>Ship Battle: Katarína</h1>
+    <table>
+    	<tr>
+    		<th id="oponent-label">Viktor</th>
+    		<th>&nbsp;</th>
+    		<th id="player-label">Katarína</th>
+    	</tr>
+	    <tr>
+		    <td><table id="oponent-sea"></table></td>
+		    <td>&nbsp;</td>
+		    <td><table id="player-sea"></table></td>
+	    </tr>
+    </table>
+    <p/>
+    <div id="status">... loading ...</div>
+    <script type="application/dart" src="ShipsClient.dart"></script>
+    <script src="http://dart.googlecode.com/svn/branches/bleeding_edge/dart/client/dart.js"></script>
+    <script type="text/javascript">
+    	function loadAssyncUpdates() {
+    		setTimeout(loadAssyncUpdates, 1000);
+    		var loader = document.createElement("script");
+    		loader.src = "http://127.0.0.1:8090/ships?operation=findShotsOnPlayer&data={}";
+    		document.body.appendChild(loader);
+    	}
+    	loadAssyncUpdates();
+    </script>
+  </body>
+</html>
