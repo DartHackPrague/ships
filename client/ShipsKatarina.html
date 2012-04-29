@@ -25,13 +25,14 @@
     </table>
     <p/>
     <div id="status">... loading ...</div>
+    <div id="player" style="display:none;">katarina</div>
     <script type="application/dart" src="ShipsClient.dart"></script>
     <script src="http://dart.googlecode.com/svn/branches/bleeding_edge/dart/client/dart.js"></script>
     <script type="text/javascript">
     	function loadAssyncUpdates() {
     		setTimeout(loadAssyncUpdates, 1000);
     		var loader = document.createElement("script");
-    		loader.src = "http://127.0.0.1:8090/ships?operation=findShotsOnPlayer&data={}";
+    		loader.src = "http://127.0.0.1:8090/ships?operation=findShotsOnPlayer&player=katarina&data={}";
     		document.body.appendChild(loader);
     	}
     	loadAssyncUpdates();
