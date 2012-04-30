@@ -3051,6 +3051,7 @@ ShipsClient.prototype.run = function() {
   get$$window().get$on().get$message().add(this.get$dataReceived(), false);
   this.createPlayground("player-sea", "placeShip", "placeShips");
   this.createPlayground("oponent-sea", "shoot", "shoot");
+  this.request("initialize", new HashMapImplementation());
 }
 ShipsClient.prototype.createPlayground = function(tableId, operationName, state) {
   var $this = this; // closure support

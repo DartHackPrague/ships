@@ -45,6 +45,8 @@ class ShipsClient {
     createPlayground("player-sea", "placeShip", "placeShips");
     createPlayground("oponent-sea", "shoot", "shoot");
     
+    request("initialize", {}); // for case the page has been reloaded - get all status information
+    
     //sendRequest("http://localhost:8090/entry", {"baf" : 15},
     //            (Map response) => uiProcessResponse(response),
     //            () => uiProcessResponse({"sprava":"nefunguje siet"}));

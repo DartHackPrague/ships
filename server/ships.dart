@@ -131,13 +131,58 @@ String shoot(String operation, data, games) {
     List shots = game["shots"];
      
     for (String shot in shots) {
-      var reportedShot = {};
-      reportedShot["coordinates"] = shot;
-      reportedShot["operation"] = "shoot";
-      reportedShot["sea"] = "player";
-      reportedShot["hit"] = ships.indexOf(shot) >= 0;
+      var reportedShot = {
+        "coordinates": shot,
+        "operation": "shoot",
+        "sea": "player",
+        "hit": ships.indexOf(shot) >= 0
+      };
       
       ret.add(reportedShot);
+    }
+  } else if ("initialize" == operation)
+  { // recover after page reload - sent all status notifications to client
+    var game = games.filter((element) { return element["playerToken"] == playerToken; })[0];
+    var oponentsGame = games.filter((element) { return element["player4oponentToken"] == oponentToken; })[0];
+    List<String> ships = game["ships"];
+    List<String> shots = game["shots"];
+    List<String> oponentsShips = oponentsGame["ships"];
+    List<String> oponentsShots = oponentsGame["shots"];
+    
+    // player's ships first
+    for (String coordinates in ships) {
+      ret.add({
+        "coordinates": coordinates,
+        "operation": "placeShip",
+        "sea": "player"
+      });
+    }
+    
+    // shots in player's sea
+    for (String shot in shots) {
+      ret.add({
+        "coordinates": shot,
+        "operation": "shoot",
+        "sea": "player",
+        "hit": ships.indexOf(shot) >= 0
+      });
+    }
+
+    // shots in oponent's sea
+    for (String shot in oponentsShots) {
+      ret.add({
+        "coordinates": shot,
+        "operation": "shoot",
+        "sea": "oponent",
+        "hit": oponentsShips.indexOf(shot) >= 0
+      });
+    }
+    
+    // update state
+    if (ships.length == SHIP_COUNT) {
+      ret.add({
+        "state" : "shoot"
+      });
     }
   }
   
