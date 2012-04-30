@@ -1213,6 +1213,9 @@ $dynamic("get$$$dom_childNodes").Node = function() {
 $dynamic("get$parent").Node = function() {
   return this.parentNode;
 }
+$dynamic("get$text").Node = function() {
+  return this.textContent;
+}
 $dynamic("set$text").Node = function(value) {
   this.textContent = value;
 }
@@ -3024,7 +3027,7 @@ function _jsKeys(obj) {
   }
   return null;
 }
-//  ********** Library C:\Users\Eugen\dart\ships\client\ShipsClient **************
+//  ********** Library ShipsClient **************
 // ********** Code for ShipsClient **************
 function ShipsClient() {
 
@@ -3106,6 +3109,11 @@ ShipsClient.prototype.get$dataReceived = function() {
 }
 ShipsClient.prototype.request = function(operation, data) {
   var script = _ElementFactoryProvider.Element$tag$factory("script");
+  var playerToken = get$$document().query("#playerToken").get$text();
+  var oponentToken = get$$document().query("#oponentToken").get$text();
+  data.$setindex("playerToken", playerToken);
+  data.$setindex("oponentToken", oponentToken);
+  print$($add$("sending: ", data));
   script.set$src($add$($add$($add$($add$("http://localhost:8090/ships?operation=", operation), "&data="), json_JSON.stringify(data)), "&callback=callbackForJsonpApi"));
   get$$document().body.get$elements().add(script);
 }

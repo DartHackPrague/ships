@@ -116,6 +116,16 @@ class ShipsClient {
   request(operation, data) {
     Element script = new Element.tag("script");
     
+    // appent tokens identifying game
+    String playerToken = document.query("#playerToken").text;
+    String oponentToken = document.query("#oponentToken").text;
+    
+    data["playerToken"] = playerToken;
+    data["oponentToken"] = oponentToken;
+    
+    print("sending: " + data);
+    
+    // send request
     script.src = "http://localhost:8090/ships"
         + "?operation=" + operation
         + "&data=" + JSON.stringify(data)

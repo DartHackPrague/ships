@@ -8,9 +8,15 @@ final SHIP_COUNT = 3;
 void main() {
   HttpServer server = new HttpServer();
   var games = [
-                 {
-                   "secretId" : "alfa",
-                   "publicId" : "beta",
+                 { // katarina
+                   "playerToken" : "alfa",
+                   "player4oponentToken" : "beta",
+                   "ships" : [],
+                   "shots" : []
+                 },
+                 { // viktor
+                   "playerToken" : "gama",
+                   "player4oponentToken" : "delta",
                    "ships" : [],
                    "shots" : []
                  }
@@ -27,9 +33,21 @@ void main() {
         
         print("operation:" + operation);
         print("data:" + data);
-        data = JSON.parse(data);
+        try {
+          data = JSON.parse(data);
+        } catch(var e) {
+          print("error while parsing " + data + ": " + e);
+        }
+        print("parsed data: " + data);
         
-        String htmlResponse = shoot(operation, data, games);
+        String htmlResponse;
+        try {
+           htmlResponse = shoot(operation, data, games);
+        } catch (var e) {
+          print("error while constructing response: " + e);
+        }
+        
+        print(games);
         
         response.headers.set(HttpHeaders.CONTENT_TYPE, "text/html; charset=UTF-8");
         response.outputStream.writeString(htmlResponse);
@@ -43,14 +61,21 @@ void main() {
 }
 
 String shoot(String operation, data, games) {
-  
-  // lookup game according to publicId
-  var game = games[0]; // TODO
+  print(data);
+  String playerToken = data["playerToken"];
+  String oponentToken = data["oponentToken"];
   List ret = []; 
+  
+  print("playerToken: " + playerToken);
+  print("oponentToken: " + oponentToken);
   
   if ("shoot" == operation)
   { // execute shooting
  
+    // lookup game according to id
+    var game = games.filter((element) { return element["player4oponentToken"] == oponentToken; })[0];
+    print(game);
+    
     var coordinates = data["coordinates"];
     
     // get list of ships
@@ -72,6 +97,8 @@ String shoot(String operation, data, games) {
   { // place ship to board
 
     var coordinates = data["coordinates"];
+    var game = games.filter((element) { return element["playerToken"] == playerToken; })[0];
+    print(game);
 
     if (game["ships"].length >= SHIP_COUNT) {
       print("too many ships: " + game["ships"]);
@@ -98,6 +125,8 @@ String shoot(String operation, data, games) {
   }
   else if ("findShotsOnPlayer" == operation)
   { // find shots fired on player, with coordinates and hit/miss result
+    var game = games.filter((element) { return element["playerToken"] == playerToken; })[0];
+    
     List ships = game["ships"];
     List shots = game["shots"];
      
