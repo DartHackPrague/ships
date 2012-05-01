@@ -4,6 +4,7 @@
 final HOST = "127.0.0.1";
 final PORT = 8090;
 final SHIP_COUNT = 3;
+final SHOT_WINDOW = 1; // how many shots we can fire without waiting for retaliation
 
 // state of one sea (ships, hits, tokens)
 class Game {
@@ -132,31 +133,41 @@ String shoot(String operation, data, games) {
   print("playerToken: " + playerToken);
   print("oponentToken: " + oponentToken);
   
+  var game = games.findGame4player(playerToken);
+  var oponentGame = games.findGame4oponent(oponentToken);
+  
+  print("player: " + game);
+  print("oponent: " + oponentGame);
+  
   if ("shoot" == operation)
   { // execute shooting
  
-    // lookup game according to id
-    var game = games.findGame4oponent(oponentToken);
-    print(game);
-    
     var coordinates = data["coordinates"];
     
-    // record shot
-    game.shots.add(coordinates);
+    // how many 'bulets' are in magazine
+    int magazine = game.shots.length - oponentGame.shots.length + SHOT_WINDOW;
+    print("magazine: " + magazine);
+    ret.add({"magazine": magazine});
     
-    // determine if the ship was hit
-    data["hit"] = game.ships.indexOf(coordinates) >= 0;
-    data["sea"] = "oponent";
-    data["operation"] = operation;
-    
-    ret.add(data);
+    // do not allow shooting with empty magazine
+    if (magazine > 0) {
+      
+      // record shot
+      oponentGame.shots.add(coordinates);
+  
+      // report shooting back to player
+      ret.add({
+        "coordinates": coordinates,
+        "hit": game.ships.indexOf(coordinates) >= 0, // determine if the ship was hit
+        "sea": "oponent",
+        "operation": "shoot"
+      });
+    }
   }
   else if ("placeShip" == operation)
   { // place ship to board
 
     var coordinates = data["coordinates"];
-    var game = games.findGame4player(playerToken);
-    print(game);
 
     if (game.ships.length >= SHIP_COUNT) {
       print("too many ships: " + game.ships);
@@ -183,7 +194,6 @@ String shoot(String operation, data, games) {
   }
   else if ("findShotsOnPlayer" == operation)
   { // find shots fired on player, with coordinates and hit/miss result
-    var game = games.findGame4player(playerToken);
     
     for (String shot in game.shots) {
       var reportedShot = {
@@ -195,10 +205,14 @@ String shoot(String operation, data, games) {
       
       ret.add(reportedShot);
     }
-  } else if ("initialize" == operation)
+    
+    // how many 'bulets' are in magazine
+    int magazine = oponentGame.shots.length - game.shots.length + SHOT_WINDOW;
+    print("magazine: " + magazine);
+    ret.add({"magazine": magazine});
+  }
+  else if ("initialize" == operation)
   { // recover after page reload - send all status notifications to client
-    var game = games.findGame4player(playerToken);
-    var oponentGame = games.findGame4oponent(oponentToken);
     
     // player's ships first
     for (String coordinates in game.ships) {
@@ -236,6 +250,8 @@ String shoot(String operation, data, games) {
       });
     }
   }
+  
+  
   
   // create response
   ret = JSON.stringify(ret);
