@@ -76,6 +76,44 @@ class Games {
   String toString() {
     return "(games) " + games;
   }
+  
+  // compute game state
+  Collection<Map> getState(String playerToken, String oponentToken) {
+    Game game = findGame4player(playerToken);
+    Game oponentGame = findGame4oponent(oponentToken);
+    
+    List ret = [];
+    String state;
+    
+    // general state
+    if (game.ships.length == SHIP_COUNT) {
+      if (oponentGame.ships.length == SHIP_COUNT) {
+        state = "shoot";
+      } else {
+        state = "wait";
+      }
+    }
+    else {
+      state = "placeShips";
+    }
+
+    // report state
+    ret.add({
+      "state": state,
+      "magazine": getMagazine(playerToken, oponentToken)
+    });
+    
+    return ret;
+  }
+  
+  // how many 'bulets' are in magazine
+  int getMagazine(String playerToken, String oponentToken) {
+    Game game = findGame4player(playerToken);
+    Game oponentGame = findGame4oponent(oponentToken);
+    int magazine = game.shots.length - oponentGame.shots.length + SHOT_WINDOW;
+    
+    return magazine;
+  }
 }
 
 void main() {
@@ -133,24 +171,18 @@ String shoot(String operation, data, games) {
   print("playerToken: " + playerToken);
   print("oponentToken: " + oponentToken);
   
-  var game = games.findGame4player(playerToken);
-  var oponentGame = games.findGame4oponent(oponentToken);
+  Game game = games.findGame4player(playerToken);
+  Game oponentGame = games.findGame4oponent(oponentToken);
   
   print("player: " + game);
   print("oponent: " + oponentGame);
   
   if ("shoot" == operation)
   { // execute shooting
- 
-    var coordinates = data["coordinates"];
-    
-    // how many 'bulets' are in magazine
-    int magazine = game.shots.length - oponentGame.shots.length + SHOT_WINDOW;
-    print("magazine: " + magazine);
-    ret.add({"magazine": magazine});
+     var coordinates = data["coordinates"];
     
     // do not allow shooting with empty magazine
-    if (magazine > 0) {
+    if (games.getMagazine(playerToken, oponentToken) > 0) {
       
       // record shot
       oponentGame.shots.add(coordinates);
@@ -166,36 +198,29 @@ String shoot(String operation, data, games) {
   }
   else if ("placeShip" == operation)
   { // place ship on sea
-
     var coordinates = data["coordinates"];
 
     if (game.ships.length >= SHIP_COUNT) {
       print("too many ships: " + game.ships);
-      return "";  // ensure not too many ships are on the map
+      // ensure not too many ships are on the map
     }
     else if (game.ships.indexOf(coordinates) >= 0) {
       print("duplicit ship: " + game.ships + " - " + coordinates);
-      return "";  // avoid duplicity in ships placement
+      // avoid duplicity in ships placement
     }
-    
-    game.ships.add(coordinates);
+    else {
+      // add ship to player's sea
+      game.ships.add(coordinates);
 
-    data["sea"] = "player";
-    data["operation"] = operation;
-    
-    ret.add(data);
-    
-    // change state if enough ships was placed on board
-    if (game.ships.length == SHIP_COUNT) {
-      if (oponentGame.ships.length == SHIP_COUNT) {
-        ret.add({
-          "state" : "shoot"
-        });
-      } else {
-        ret.add({
-          "state" : "wait"
-        });
-      }
+      // report adding ship
+      ret.add({
+        "coordinates": coordinates,
+        "sea": "player",
+        "operation": "placeShip"
+      });
+      
+      // change state if enough ships was placed on board
+      ret.addAll(games.getState(playerToken, oponentToken));
     }
   }
   else if ("findShotsOnPlayer" == operation)
@@ -212,23 +237,8 @@ String shoot(String operation, data, games) {
       ret.add(reportedShot);
     }
     
-    // how many 'bulets' are in magazine
-    int magazine = game.shots.length - oponentGame.shots.length + SHOT_WINDOW;
-    print("magazine: " + magazine);
-    ret.add({"magazine": magazine});
-    
-    // update state
-    if (game.ships.length == SHIP_COUNT) {
-      if (oponentGame.ships.length == SHIP_COUNT) {
-        ret.add({
-          "state" : "shoot"
-        });
-      } else {
-        ret.add({
-          "state" : "wait"
-        });
-      }
-    }
+    // report state
+    ret.addAll(games.getState(playerToken, oponentToken));
   }
   else if ("initialize" == operation)
   { // recover after page reload - send all status notifications to client
@@ -262,21 +272,10 @@ String shoot(String operation, data, games) {
       });
     }
     
-    // update state
-    if (game.ships.length == SHIP_COUNT) {
-      if (oponentGame.ships.length == SHIP_COUNT) {
-        ret.add({
-          "state" : "shoot"
-        });
-      } else {
-        ret.add({
-          "state" : "wait"
-        });
-      }
-    }
+    // report state
+    ret.addAll(games.getState(playerToken, oponentToken));
   }
-  
-  
+    
   
   // create response
   ret = JSON.stringify(ret);

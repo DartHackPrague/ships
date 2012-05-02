@@ -5,7 +5,7 @@
 
 class ShipsClient {
   String _gameState;  // placeShips, wait, shoot
-  int _magazine;      // number of bullets in magazine
+  int _magazine = 0;  // number of bullets in magazine
 
   // state should be: placeShips | wait | shoot
   void setGameState(String gameState) {
