@@ -158,7 +158,7 @@ String shoot(String operation, data, games) {
       // report shooting back to player
       ret.add({
         "coordinates": coordinates,
-        "hit": game.ships.indexOf(coordinates) >= 0, // determine if the ship was hit
+        "hit": oponentGame.ships.indexOf(coordinates) >= 0, // determine if the ship was hit
         "sea": "oponent",
         "operation": "shoot"
       });
