@@ -4,10 +4,10 @@
 
 
 class ShipsClient {
-  String _gameState;  // placeShips, shoot
+  String _gameState;  // placeShips, wait, shoot
   int _magazine;      // number of bullets in magazine
 
-  // state should be: placeShips | shoot
+  // state should be: placeShips | wait | shoot
   void setGameState(String gameState) {
     _gameState = gameState;
     drawStateFeedback();
@@ -26,6 +26,10 @@ class ShipsClient {
     if ("placeShips" == _gameState) {
       playerTable.style.setProperty("border", "10px solid pink");
       oponentTable.style.setProperty("border", "");
+    }
+    else if ("wait" == _gameState) {  // wait until oponent has the ships placed
+      playerTable.style.setProperty("border", "");
+      oponentTable.style.setProperty("border", "10px solid lightgray");
     }
     else if ("shoot" == _gameState) {
       playerTable.style.setProperty("border", "");

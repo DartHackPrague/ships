@@ -3047,6 +3047,10 @@ ShipsClient.prototype.drawStateFeedback = function() {
     playerTable.get$style().setProperty$2("border", "10px solid pink");
     oponentTable.get$style().setProperty$2("border", "");
   }
+  else if ("wait" == this._gameState) {
+    playerTable.get$style().setProperty$2("border", "");
+    oponentTable.get$style().setProperty$2("border", "10px solid lightgray");
+  }
   else if ("shoot" == this._gameState) {
     playerTable.get$style().setProperty$2("border", "");
     if (this._magazine > (0)) {

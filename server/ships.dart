@@ -187,9 +187,15 @@ String shoot(String operation, data, games) {
     
     // change state if enough ships was placed on board
     if (game.ships.length == SHIP_COUNT) {
-      ret.add({
-        "state" : "shoot"
-      });
+      if (oponentGame.ships.length == SHIP_COUNT) {
+        ret.add({
+          "state" : "shoot"
+        });
+      } else {
+        ret.add({
+          "state" : "wait"
+        });
+      }
     }
   }
   else if ("findShotsOnPlayer" == operation)
@@ -210,6 +216,19 @@ String shoot(String operation, data, games) {
     int magazine = game.shots.length - oponentGame.shots.length + SHOT_WINDOW;
     print("magazine: " + magazine);
     ret.add({"magazine": magazine});
+    
+    // update state
+    if (game.ships.length == SHIP_COUNT) {
+      if (oponentGame.ships.length == SHIP_COUNT) {
+        ret.add({
+          "state" : "shoot"
+        });
+      } else {
+        ret.add({
+          "state" : "wait"
+        });
+      }
+    }
   }
   else if ("initialize" == operation)
   { // recover after page reload - send all status notifications to client
@@ -245,9 +264,15 @@ String shoot(String operation, data, games) {
     
     // update state
     if (game.ships.length == SHIP_COUNT) {
-      ret.add({
-        "state" : "shoot"
-      });
+      if (oponentGame.ships.length == SHIP_COUNT) {
+        ret.add({
+          "state" : "shoot"
+        });
+      } else {
+        ret.add({
+          "state" : "wait"
+        });
+      }
     }
   }
   
