@@ -4,22 +4,36 @@
 
 
 class ShipsClient {
-  var _gameState; 
+  String _gameState;  // placeShips, shoot
+  int _magazine;      // number of bullets in magazine
 
   // state should be: placeShips | shoot
   void setGameState(String gameState) {
     _gameState = gameState;
-    
-    // make border around the table according to state
+    drawStateFeedback();
+  }
+  
+  void setMagazine(int magazine) {
+    _magazine = magazine;
+    drawStateFeedback();
+  }
+
+  // make border around the table according to state
+  void drawStateFeedback() {
     TableElement playerTable = document.query("#player-sea");
     TableElement oponentTable = document.query("#oponent-sea");
-    if ("placeShips" == gameState) {
+    
+    if ("placeShips" == _gameState) {
       playerTable.style.setProperty("border", "10px solid pink");
       oponentTable.style.setProperty("border", "");
     }
-    else if ("shoot" == gameState) {
+    else if ("shoot" == _gameState) {
       playerTable.style.setProperty("border", "");
-      oponentTable.style.setProperty("border", "10px solid pink");
+      if (_magazine > 0) {
+        oponentTable.style.setProperty("border", "10px solid pink");
+      } else {
+        oponentTable.style.setProperty("border", "10px solid lightgray");
+      }
     }
   }
   
@@ -92,6 +106,10 @@ class ShipsClient {
     for (Map msg in data) {
       if (msg.containsKey("state")) {
         setGameState(msg["state"]);
+      }
+      
+      if (msg.containsKey("magazine")) {
+        setMagazine(msg["magazine"]);
       }
       
       if ("shoot" == msg["operation"]) {

@@ -3034,15 +3034,27 @@ function ShipsClient() {
 }
 ShipsClient.prototype.setGameState = function(gameState) {
   this._gameState = gameState;
+  this.drawStateFeedback();
+}
+ShipsClient.prototype.setMagazine = function(magazine) {
+  this._magazine = magazine;
+  this.drawStateFeedback();
+}
+ShipsClient.prototype.drawStateFeedback = function() {
   var playerTable = get$$document().query("#player-sea");
   var oponentTable = get$$document().query("#oponent-sea");
-  if ("placeShips" == gameState) {
+  if ("placeShips" == this._gameState) {
     playerTable.get$style().setProperty$2("border", "10px solid pink");
     oponentTable.get$style().setProperty$2("border", "");
   }
-  else if ("shoot" == gameState) {
+  else if ("shoot" == this._gameState) {
     playerTable.get$style().setProperty$2("border", "");
-    oponentTable.get$style().setProperty$2("border", "10px solid pink");
+    if (this._magazine > (0)) {
+      oponentTable.get$style().setProperty$2("border", "10px solid pink");
+    }
+    else {
+      oponentTable.get$style().setProperty$2("border", "10px solid lightgray");
+    }
   }
 }
 ShipsClient.prototype.run = function() {
@@ -3087,6 +3099,9 @@ ShipsClient.prototype.dataReceived = function(e) {
     var msg = $$i.next();
     if (msg.containsKey("state")) {
       this.setGameState(msg.$index("state"));
+    }
+    if (msg.containsKey("magazine")) {
+      this.setMagazine(msg.$index("magazine"));
     }
     if ("shoot" == msg.$index("operation")) {
       var id = $add$($add$($add$("#", msg.$index("sea")), "-sea-"), msg.$index("coordinates"));
