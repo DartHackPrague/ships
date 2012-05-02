@@ -165,7 +165,7 @@ String shoot(String operation, data, games) {
     }
   }
   else if ("placeShip" == operation)
-  { // place ship to board
+  { // place ship on sea
 
     var coordinates = data["coordinates"];
 
@@ -207,7 +207,7 @@ String shoot(String operation, data, games) {
     }
     
     // how many 'bulets' are in magazine
-    int magazine = oponentGame.shots.length - game.shots.length + SHOT_WINDOW;
+    int magazine = game.shots.length - oponentGame.shots.length + SHOT_WINDOW;
     print("magazine: " + magazine);
     ret.add({"magazine": magazine});
   }
