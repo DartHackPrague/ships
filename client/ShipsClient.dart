@@ -99,7 +99,12 @@ class ShipsClient {
         TableCellElement cell = document.query(id);
         
         if (msg["hit"]) {
-          cell.bgColor = "red";
+          cell.bgColor = "green";
+          if ("oponent" == msg["sea"]) {
+            cell.bgColor = "red";
+          } else {
+            cell.bgColor = "black";
+          }
         } else {
           cell.bgColor = "darkgray";
         }

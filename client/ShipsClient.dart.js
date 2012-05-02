@@ -3092,7 +3092,13 @@ ShipsClient.prototype.dataReceived = function(e) {
       var id = $add$($add$($add$("#", msg.$index("sea")), "-sea-"), msg.$index("coordinates"));
       var cell = get$$document().query(id);
       if (msg.$index("hit")) {
-        cell.bgColor = "red";
+        cell.bgColor = "green";
+        if ("oponent" == msg.$index("sea")) {
+          cell.bgColor = "red";
+        }
+        else {
+          cell.bgColor = "black";
+        }
       }
       else {
         cell.bgColor = "darkgray";
