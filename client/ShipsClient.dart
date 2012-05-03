@@ -4,10 +4,9 @@
 
 
 class ShipsClient {
-  String _gameState;  // placeShips, wait, shoot
+  String _gameState;  // placeShips, wait, shoot, win, lose
   int _magazine = 0;  // number of bullets in magazine
 
-  // state should be: placeShips | wait | shoot
   void setGameState(String gameState) {
     _gameState = gameState;
     drawStateFeedback();
@@ -23,22 +22,29 @@ class ShipsClient {
     TableElement playerTable = document.query("#player-sea");
     TableElement oponentTable = document.query("#oponent-sea");
     
+    String playerBorder = "";
+    String oponentBorder = "";
+    
     if ("placeShips" == _gameState) {
-      playerTable.style.setProperty("border", "10px solid pink");
-      oponentTable.style.setProperty("border", "");
+      playerBorder = "10px solid pink";
     }
     else if ("wait" == _gameState) {  // wait until oponent has the ships placed
-      playerTable.style.setProperty("border", "");
-      oponentTable.style.setProperty("border", "10px solid lightgray");
+      oponentBorder = "10px solid lightgray";
     }
     else if ("shoot" == _gameState) {
-      playerTable.style.setProperty("border", "");
       if (_magazine > 0) {
-        oponentTable.style.setProperty("border", "10px solid pink");
+        oponentBorder = "10px solid pink";
       } else {
-        oponentTable.style.setProperty("border", "10px solid lightgray");
+        oponentBorder = "10px solid lightgray";
       }
+    } else if ("win" == _gameState) {
+      write("You WON!");
+    } else if ("loose" == _gameState) {
+      write("You LOST");
     }
+    
+    playerTable.style.setProperty("border", playerBorder);
+    oponentTable.style.setProperty("border", oponentBorder);
   }
   
   ShipsClient() {

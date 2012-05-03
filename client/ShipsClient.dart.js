@@ -3030,7 +3030,7 @@ function _jsKeys(obj) {
 //  ********** Library ShipsClient **************
 // ********** Code for ShipsClient **************
 function ShipsClient() {
-
+  this._magazine = (0);
 }
 ShipsClient.prototype.setGameState = function(gameState) {
   this._gameState = gameState;
@@ -3043,23 +3043,30 @@ ShipsClient.prototype.setMagazine = function(magazine) {
 ShipsClient.prototype.drawStateFeedback = function() {
   var playerTable = get$$document().query("#player-sea");
   var oponentTable = get$$document().query("#oponent-sea");
+  var playerBorder = "";
+  var oponentBorder = "";
   if ("placeShips" == this._gameState) {
-    playerTable.get$style().setProperty$2("border", "10px solid pink");
-    oponentTable.get$style().setProperty$2("border", "");
+    playerBorder = "10px solid pink";
   }
   else if ("wait" == this._gameState) {
-    playerTable.get$style().setProperty$2("border", "");
-    oponentTable.get$style().setProperty$2("border", "10px solid lightgray");
+    oponentBorder = "10px solid lightgray";
   }
   else if ("shoot" == this._gameState) {
-    playerTable.get$style().setProperty$2("border", "");
     if (this._magazine > (0)) {
-      oponentTable.get$style().setProperty$2("border", "10px solid pink");
+      oponentBorder = "10px solid pink";
     }
     else {
-      oponentTable.get$style().setProperty$2("border", "10px solid lightgray");
+      oponentBorder = "10px solid lightgray";
     }
   }
+  else if ("win" == this._gameState) {
+    this.write("You WON!");
+  }
+  else if ("loose" == this._gameState) {
+    this.write("You LOST");
+  }
+  playerTable.get$style().setProperty$2("border", playerBorder);
+  oponentTable.get$style().setProperty$2("border", oponentBorder);
 }
 ShipsClient.prototype.run = function() {
   this.write("Ship Battle Game");

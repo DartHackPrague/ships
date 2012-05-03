@@ -25,7 +25,7 @@
 	    </tr>
     </table>
     <p/>
-    <div id="status">... loading ...</div>
+    <h2 id="status">... loading ...</h2>
     <div id="player" style="display:none;">katarina</div>
     <div id="playerToken" style="display:none;">alfa</div>
     <div id="oponentToken" style="display:none;">delta</div>
@@ -35,7 +35,7 @@
     	function loadAssyncUpdates() {
     		setTimeout(loadAssyncUpdates, 1000);
     		var loader = document.createElement("script");
-    		loader.src = 'http://127.0.0.1:8090/ships?operation=findShotsOnPlayer&player=katarina&data={"playerToken":"alfa", "oponentToken": "delta"}';
+    		loader.src = 'http://127.0.0.1:8090/ships?operation=findShotsOnPlayer&data={"playerToken":"alfa", "oponentToken": "delta"}';
     		document.body.appendChild(loader);
     	}
     	loadAssyncUpdates();
