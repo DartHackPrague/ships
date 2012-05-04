@@ -1323,12 +1323,15 @@ $dynamic("set$value").HTMLButtonElement = function(value) { return this.value = 
 // ********** Code for _CSSRuleImpl **************
 // ********** Code for _CSSCharsetRuleImpl **************
 // ********** Code for _CSSFontFaceRuleImpl **************
+$dynamic("get$style").CSSFontFaceRule = function() { return this.style; };
 // ********** Code for _CSSImportRuleImpl **************
 // ********** Code for _CSSKeyframeRuleImpl **************
+$dynamic("get$style").WebKitCSSKeyframeRule = function() { return this.style; };
 // ********** Code for _CSSKeyframesRuleImpl **************
 // ********** Code for _CSSMatrixImpl **************
 // ********** Code for _CSSMediaRuleImpl **************
 // ********** Code for _CSSPageRuleImpl **************
+$dynamic("get$style").CSSPageRule = function() { return this.style; };
 // ********** Code for _CSSValueImpl **************
 // ********** Code for _CSSPrimitiveValueImpl **************
 // ********** Code for _CSSRuleListImpl **************
@@ -1340,6 +1343,7 @@ $dynamic("setProperty$2").CSSStyleDeclaration = function($0, $1) {
   return this.setProperty($0, $1);
 };
 // ********** Code for _CSSStyleRuleImpl **************
+$dynamic("get$style").CSSStyleRule = function() { return this.style; };
 // ********** Code for _StyleSheetImpl **************
 // ********** Code for _CSSStyleSheetImpl **************
 // ********** Code for _CSSValueListImpl **************
@@ -2442,6 +2446,7 @@ $dynamic("set$value").SVGAngle = function(value) { return this.value = value; };
 // ********** Code for _SVGFETurbulenceElementImpl **************
 // ********** Code for _SVGFilterElementImpl **************
 // ********** Code for _SVGStylableImpl **************
+$dynamic("get$style").SVGStylable = function() { return this.style; };
 // ********** Code for _SVGFilterPrimitiveStandardAttributesImpl **************
 // ********** Code for _SVGFitToViewBoxImpl **************
 // ********** Code for _SVGFontElementImpl **************
@@ -3045,18 +3050,24 @@ ShipsClient.prototype.drawStateFeedback = function() {
   var oponentTable = get$$document().query("#oponent-sea");
   var playerBorder = "";
   var oponentBorder = "";
+  var playerBorderWidth = (0);
+  var oponentBorderWidth = (0);
   if ("placeShips" == this._gameState) {
-    playerBorder = "10px solid pink";
+    playerBorder = "px solid pink";
+    playerBorderWidth = (10);
   }
   else if ("wait" == this._gameState) {
-    oponentBorder = "10px solid lightgray";
+    oponentBorder = "px solid lightgray";
+    oponentBorderWidth = (10);
   }
   else if ("shoot" == this._gameState) {
     if (this._magazine > (0)) {
-      oponentBorder = "10px solid pink";
+      oponentBorder = "px solid pink";
+      oponentBorderWidth = ((5) * this._magazine);
     }
     else {
-      oponentBorder = "10px solid lightgray";
+      oponentBorder = "px solid lightgray";
+      oponentBorderWidth = (5);
     }
   }
   else if ("win" == this._gameState) {
@@ -3065,8 +3076,10 @@ ShipsClient.prototype.drawStateFeedback = function() {
   else if ("loose" == this._gameState) {
     this.write("You LOST");
   }
-  playerTable.get$style().setProperty$2("border", playerBorder);
-  oponentTable.get$style().setProperty$2("border", oponentBorder);
+  playerTable.get$style().setProperty$2("border", $add$("" + playerBorderWidth, playerBorder));
+  oponentTable.get$style().setProperty$2("border", $add$("" + oponentBorderWidth, oponentBorder));
+  playerTable.get$parent().get$style().setProperty$2("padding", $add$("" + ((20) - playerBorderWidth), "px"));
+  oponentTable.get$parent().get$style().setProperty$2("padding", $add$("" + ((20) - oponentBorderWidth), "px"));
 }
 ShipsClient.prototype.run = function() {
   this.write("Ship Battle Game");
@@ -3157,9 +3170,9 @@ ShipsClient.prototype.write = function(message) {
 function main() {
   new ShipsClient().run();
 }
-// 63 dynamic types.
-// 211 types
-// 18 !leaf
+// 68 dynamic types.
+// 217 types
+// 19 !leaf
 (function(){
   var v0/*HTMLMediaElement*/ = 'HTMLMediaElement|HTMLAudioElement|HTMLVideoElement';
   var v1/*SVGElement*/ = 'SVGElement|SVGAElement|SVGAltGlyphDefElement|SVGAltGlyphItemElement|SVGAnimationElement|SVGAnimateColorElement|SVGAnimateElement|SVGAnimateMotionElement|SVGAnimateTransformElement|SVGSetElement|SVGCircleElement|SVGClipPathElement|SVGComponentTransferFunctionElement|SVGFEFuncAElement|SVGFEFuncBElement|SVGFEFuncGElement|SVGFEFuncRElement|SVGCursorElement|SVGDefsElement|SVGDescElement|SVGEllipseElement|SVGFEBlendElement|SVGFEColorMatrixElement|SVGFEComponentTransferElement|SVGFECompositeElement|SVGFEConvolveMatrixElement|SVGFEDiffuseLightingElement|SVGFEDisplacementMapElement|SVGFEDistantLightElement|SVGFEDropShadowElement|SVGFEFloodElement|SVGFEGaussianBlurElement|SVGFEImageElement|SVGFEMergeElement|SVGFEMergeNodeElement|SVGFEMorphologyElement|SVGFEOffsetElement|SVGFEPointLightElement|SVGFESpecularLightingElement|SVGFESpotLightElement|SVGFETileElement|SVGFETurbulenceElement|SVGFilterElement|SVGFontElement|SVGFontFaceElement|SVGFontFaceFormatElement|SVGFontFaceNameElement|SVGFontFaceSrcElement|SVGFontFaceUriElement|SVGForeignObjectElement|SVGGElement|SVGGlyphElement|SVGGlyphRefElement|SVGGradientElement|SVGLinearGradientElement|SVGRadialGradientElement|SVGHKernElement|SVGImageElement|SVGLineElement|SVGMPathElement|SVGMarkerElement|SVGMaskElement|SVGMetadataElement|SVGMissingGlyphElement|SVGPathElement|SVGPatternElement|SVGPolygonElement|SVGPolylineElement|SVGRectElement|SVGSVGElement|SVGScriptElement|SVGStopElement|SVGStyleElement|SVGSwitchElement|SVGSymbolElement|SVGTextContentElement|SVGTextPathElement|SVGTextPositioningElement|SVGAltGlyphElement|SVGTRefElement|SVGTSpanElement|SVGTextElement|SVGTitleElement|SVGUseElement|SVGVKernElement|SVGViewElement';
@@ -3178,6 +3191,7 @@ function main() {
     , ['EntrySync', 'EntrySync|DirectoryEntrySync|FileEntrySync']
     , ['HTMLCollection', 'HTMLCollection|HTMLOptionsCollection']
     , ['Node', [v2/*HTMLDocument*/,v3/*DocumentFragment*/,v4/*Element*/,'Node|Attr|CharacterData|Comment|Text|CDATASection|DocumentType|Entity|EntityReference|Notation|ProcessingInstruction'].join('|')]
+    , ['SVGStylable', 'SVGStylable|SVGFilterPrimitiveStandardAttributes']
     , ['Uint8Array', 'Uint8Array|Uint8ClampedArray']
   ];
   $dynamicSetMetadata(table);

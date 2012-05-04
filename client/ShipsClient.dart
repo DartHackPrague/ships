@@ -25,17 +25,24 @@ class ShipsClient {
     String playerBorder = "";
     String oponentBorder = "";
     
+    int playerBorderWidth = 0;
+    int oponentBorderWidth = 0;
+    
     if ("placeShips" == _gameState) {
-      playerBorder = "10px solid pink";
+      playerBorder = "px solid pink";
+      playerBorderWidth = 10;
     }
     else if ("wait" == _gameState) {  // wait until oponent has the ships placed
-      oponentBorder = "10px solid lightgray";
+      oponentBorder = "px solid lightgray";
+      oponentBorderWidth = 10;
     }
     else if ("shoot" == _gameState) {
       if (_magazine > 0) {
-        oponentBorder = "10px solid pink";
+        oponentBorder = "px solid pink";
+        oponentBorderWidth = (5 * _magazine);
       } else {
-        oponentBorder = "10px solid lightgray";
+        oponentBorder = "px solid lightgray";
+        oponentBorderWidth = 5;
       }
     } else if ("win" == _gameState) {
       write("You WON!");
@@ -43,8 +50,11 @@ class ShipsClient {
       write("You LOST");
     }
     
-    playerTable.style.setProperty("border", playerBorder);
-    oponentTable.style.setProperty("border", oponentBorder);
+    playerTable.style.setProperty("border", "" + playerBorderWidth + playerBorder);
+    oponentTable.style.setProperty("border", "" + oponentBorderWidth + oponentBorder);
+
+    playerTable.parent.style.setProperty("padding", "" + (20 - playerBorderWidth) + "px");
+    oponentTable.parent.style.setProperty("padding", "" + (20 - oponentBorderWidth) + "px");
   }
   
   ShipsClient() {

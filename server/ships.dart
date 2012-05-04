@@ -4,7 +4,7 @@
 final HOST = "127.0.0.1";
 final PORT = 8090;
 final SHIP_COUNT = 3;
-final SHOT_WINDOW = 1; // how many shots we can fire without waiting for retaliation
+final SHOT_WINDOW = 2; // how many shots we can fire without waiting for retaliation
 
 void main() {
   HttpServer server = new HttpServer();
